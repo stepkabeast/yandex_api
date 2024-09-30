@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список файлов</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h1 class="mb-4">Список файлов и папок</h1>
+    <a href="/logout" class="btn btn-secondary mb-4">Выйти</a>
+    
+    <h5>Текущий путь: {{ current_path }}</h5>
+    
+    <form method="post" action="{{ url_for('dashboard', public_key=public_key) }}" class="mb-4">
+        <div class="form-group">
+            <label for="file_type">Фильтр по типу файлов:</label>
+            <select name="file_type" id="file_type" class="form-control">
+                <option value="">Все</option>
+                <option value="image">Изображения</option>
+                <option value="application">Документы</option>
+                <option value="audio">Аудио</option>
+                <option value="video">Видео</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Применить фильтр</button>
+    </form>
+
+    <ul class="list-group">
+        {% for item in items %}
+            <li class="list-group-item">
+                {% if item['type'] == 'dir' %}
+                    <a href="{{ url_for('dashboard', public_key=public_key, path=item['path']) }}">{{ item['name'] }} (папка)</a>
+                {% else %}
+                    {{ item['name'] }} ({{ item['mime_type'] }})
+                    <a href="{{ item['file'] }}" class="btn btn-sm btn-outline-primary float-right" download>Скачать</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="mt-4">
+        {% if current_path and current_path != '/' %}
+            <a href="{{ url_for('dashboard', public_key=public_key, path=current_path.rsplit('/', 1)[0] if '/' in current_path else '') }}" class="btn btn-link">Назад</a>
+        {% endif %}
+        <a href="{{ url_for('dashboard', public_key=public_key, path='') }}" class="btn btn-link">Вернуться в корень</a>
+    </div>
+</body>
+</html>

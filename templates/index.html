@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Яндекс.Диск - Авторизация</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h1 class="mb-4">Добро пожаловать!</h1>
+    {% if session.get('access_token') %}
+        <form action="/dashboard" method="post">
+            <div class="form-group">
+                <label for="public_key">Введите публичный ключ Яндекс.Диска:</label>
+                <input type="text" id="public_key" name="public_key" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Показать файлы</button>
+        </form>
+    {% else %}
+        <a href="/login" class="btn btn-success">Авторизоваться через Яндекс</a>
+    {% endif %}
+</body>
+</html>
